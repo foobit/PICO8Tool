@@ -254,6 +254,8 @@ namespace PICO8Tool
 				var img = new Bitmap(128, 128, PixelFormat.Format8bppIndexed);
 
 				// replace with PICO-8 palette
+                applyPicoPalette(img);
+                /*
 				var pal = img.Palette;
 				for (int i = 0; i < 256; i++)
 				{
@@ -261,6 +263,7 @@ namespace PICO8Tool
                 }
 
 				img.Palette = pal;
+                */
 
 				// copy bits
 				var ary = pixels.ToArray();
@@ -304,22 +307,82 @@ namespace PICO8Tool
 			btnExtract.Enabled = img != null;
 		}
 
+        private void applyPicoPalette(Bitmap img)
+        {
+            var pal = img.Palette;
+            for (int i = 0; i < pal.Entries.Length; i++)
+            {
+                pal.Entries[i] = i < 16 ? picoPalette[i] : Color.Black;
+            }
+
+            img.Palette = pal;
+        }
+
+        private float grayscale(Color col)
+        {
+            return 0.11f * col.B + 0.59f * col.G + 0.30f * col.R;
+        }
+
+        private byte snapColorToPicoPalette(Color inCol)
+        {
+            byte index = 0;
+            float g = grayscale(inCol);
+            float diff = float.PositiveInfinity;
+            for (byte i = 0; i < picoPalette.Length; i++)
+            {
+                float d = Math.Abs(grayscale(picoPalette[i])-g);
+                if (d < diff)
+                {
+                    diff = d;
+                    index = i;
+                }
+            }
+            return index;
+        }
+
+
 		private void LoadImage(string file)
 		{
 			try
 			{
-				var img = new Bitmap(file);
+				var ori = new Bitmap(file);
+                var img = new Bitmap(128, 128, PixelFormat.Format8bppIndexed);
+                //ColorPalette pal = new ColorPalette()
+                //img.Palette.Entries = picoPalette;
+                applyPicoPalette(img);
 
 				// validate size and palette
-				if (img.Width != 128 || img.Height != 128) throw new Exception("Image size must be 128x128");
-				if (img.PixelFormat != PixelFormat.Format8bppIndexed) throw new Exception("Only 8bit palette images supported");
-				if (img.Palette.Entries.Length < 16) throw new Exception("Invalid palette size");
-				for (int i=0; i< 16; i++)
-				{
-					if (img.Palette.Entries[i] != picoPalette[i]) throw new Exception("Palette does not match PICO-8");
-				}
+				if (ori.Width != 128 || ori.Height != 128) throw new Exception("Image size must be 128x128");
 
-				SetImage(img);
+                if (snapColorsCheckBox.Checked)
+                {
+                    var data = img.LockBits(new Rectangle(0, 0, img.Width, img.Height), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
+
+                    var bytes = new byte[data.Height * data.Stride];
+                    Marshal.Copy(data.Scan0, bytes, 0, bytes.Length);
+                    for (int y = 0; y < 128; y++)
+                    {
+                        for (int x = 0; x < 128; x++)
+                        {
+                            bytes[x + y * data.Stride] = snapColorToPicoPalette(ori.GetPixel(x, y));
+                        }
+                    }
+                    Marshal.Copy(bytes, 0, data.Scan0, bytes.Length);
+
+                    img.UnlockBits(data);
+                    ori = img;
+                }
+                else
+                {
+                    if (ori.PixelFormat != PixelFormat.Format8bppIndexed) throw new Exception("Only 8bit palette images supported");
+                    if (ori.Palette.Entries.Length < 16) throw new Exception("Invalid palette size");
+                    for (int i = 0; i < 16; i++)
+                    {
+                        if (ori.Palette.Entries[i] != picoPalette[i]) throw new Exception("Palette does not match PICO-8");
+                    }
+                }
+
+				SetImage(ori);
 				imgFile = file;
 			}
 			catch (Exception ex)
