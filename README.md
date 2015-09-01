@@ -17,5 +17,7 @@ You can pan and zoom the loaded image with the left button and mouse wheel.  Cli
 
 Click on the *checker button* to toggle the background from dark to light.
 
-### ISSUES
-Check [GitHub Issues](https://github.com/foobit/PICO8Tool/issues) for upcoming features, issues or suggestions.
+![Viewer Image](/Docs/PICO8Tool-02.png?raw=true "Loaded Image")
+
+### FEEDBACK
+Use [GitHub Issues](https://github.com/foobit/PICO8Tool/issues) for upcoming features, issues or suggestions.
