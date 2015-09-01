@@ -39,6 +39,7 @@ namespace PICO8Tool
 		{
 			InitializeComponent();
 			picViewer.CurrentScaleChanged += PicViewer_CurrentScaleChanged;
+            colorOptions.SelectedIndex = 0;
 			saveDialog = new SaveFileDialog();
         }
 
@@ -323,14 +324,28 @@ namespace PICO8Tool
             return 0.11f * col.B + 0.59f * col.G + 0.30f * col.R;
         }
 
+        private float colorDifference(Color col1, Color col2)
+        {
+            return (float)Math.Sqrt(Math.Pow(col2.R - col1.R, 2) + Math.Pow(col2.G - col1.G, 2) + Math.Pow(col2.B - col1.B, 2));
+        }
+
         private byte snapColorToPicoPalette(Color inCol)
         {
             byte index = 0;
             float g = grayscale(inCol);
             float diff = float.PositiveInfinity;
+            float d;
+
             for (byte i = 0; i < picoPalette.Length; i++)
             {
-                float d = Math.Abs(grayscale(picoPalette[i])-g);
+                switch(colorOptions.SelectedIndex)
+                {
+                    case 1: d = Math.Abs(grayscale(picoPalette[i]) - g);break;
+                    case 2: d = colorDifference(picoPalette[i], inCol);break;
+                    default:
+                        throw new Exception("Invalid color option");
+                }
+    
                 if (d < diff)
                 {
                     diff = d;
@@ -350,7 +365,7 @@ namespace PICO8Tool
 				// validate size and palette
 				if (img.Width != 128 || img.Height != 128) throw new Exception("Image size must be 128x128");
 
-                if (snapColorsCheckBox.Checked)
+                if (colorOptions.SelectedIndex > 0)
                 {
                     var tmp = new Bitmap(128, 128, PixelFormat.Format8bppIndexed);
                     applyPicoPalette(tmp);

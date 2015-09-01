@@ -39,13 +39,13 @@
             this.btnResetView = new System.Windows.Forms.ToolStripButton();
             this.btnAbout = new System.Windows.Forms.ToolStripButton();
             this.btnShowSettings = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.colorOptions = new System.Windows.Forms.ToolStripComboBox();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.propertyGrid = new System.Windows.Forms.PropertyGrid();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.lblZoom = new System.Windows.Forms.ToolStripStatusLabel();
-            this.snapColorsCheckBox = new System.Windows.Forms.CheckBox();
             this.picViewer = new PICO8Tool.PicViewer();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
@@ -67,11 +67,12 @@
             this.btnResetView,
             this.btnAbout,
             this.btnShowSettings,
-            this.toolStripSeparator1});
+            this.toolStripSeparator1,
+            this.colorOptions});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStrip.Size = new System.Drawing.Size(420, 25);
+            this.toolStrip.Size = new System.Drawing.Size(607, 25);
             this.toolStrip.TabIndex = 0;
             this.toolStrip.Text = "toolStrip1";
             // 
@@ -162,6 +163,23 @@
             this.btnShowSettings.Visible = false;
             this.btnShowSettings.Click += new System.EventHandler(this.btnShowSettings_Click);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // colorOptions
+            // 
+            this.colorOptions.AutoSize = false;
+            this.colorOptions.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.colorOptions.Items.AddRange(new object[] {
+            "don\'t change colors",
+            "colors from grayscale",
+            "colors from difference"});
+            this.colorOptions.Name = "colorOptions";
+            this.colorOptions.Size = new System.Drawing.Size(130, 23);
+            this.colorOptions.Text = "don\'t change colors";
+            // 
             // splitContainer
             // 
             this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -176,7 +194,7 @@
             // 
             this.splitContainer.Panel2.Controls.Add(this.propertyGrid);
             this.splitContainer.Panel2Collapsed = true;
-            this.splitContainer.Size = new System.Drawing.Size(420, 337);
+            this.splitContainer.Size = new System.Drawing.Size(607, 337);
             this.splitContainer.SplitterDistance = 261;
             this.splitContainer.TabIndex = 1;
             // 
@@ -195,7 +213,7 @@
             this.lblZoom});
             this.statusStrip.Location = new System.Drawing.Point(0, 362);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(420, 22);
+            this.statusStrip.Size = new System.Drawing.Size(607, 22);
             this.statusStrip.TabIndex = 2;
             this.statusStrip.Text = "statusStrip1";
             // 
@@ -205,16 +223,6 @@
             this.lblZoom.Size = new System.Drawing.Size(35, 17);
             this.lblZoom.Text = "100%";
             // 
-            // snapColorsCheckBox
-            // 
-            this.snapColorsCheckBox.AutoSize = true;
-            this.snapColorsCheckBox.Location = new System.Drawing.Point(220, 5);
-            this.snapColorsCheckBox.Name = "snapColorsCheckBox";
-            this.snapColorsCheckBox.Size = new System.Drawing.Size(80, 17);
-            this.snapColorsCheckBox.TabIndex = 3;
-            this.snapColorsCheckBox.Text = "snap colors";
-            this.snapColorsCheckBox.UseVisualStyleBackColor = true;
-            // 
             // picViewer
             // 
             this.picViewer.BackColor = System.Drawing.Color.Black;
@@ -222,21 +230,15 @@
             this.picViewer.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.picViewer.Location = new System.Drawing.Point(0, 0);
             this.picViewer.Name = "picViewer";
-            this.picViewer.Size = new System.Drawing.Size(420, 337);
+            this.picViewer.Size = new System.Drawing.Size(607, 337);
             this.picViewer.TabIndex = 0;
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
             // MainForm
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(420, 384);
-            this.Controls.Add(this.snapColorsCheckBox);
+            this.ClientSize = new System.Drawing.Size(607, 384);
             this.Controls.Add(this.splitContainer);
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.statusStrip);
@@ -273,9 +275,9 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 		private System.Windows.Forms.ToolStripButton btnAbout;
 		private System.Windows.Forms.ToolStripButton btnNew;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.CheckBox snapColorsCheckBox;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripComboBox colorOptions;
 	}
 }
 
