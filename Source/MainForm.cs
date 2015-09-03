@@ -32,16 +32,26 @@ namespace PICO8Tool
 
 		private string p8file;
 		private string imgFile;
+		private string lastOpenFile;
 
 		private SaveFileDialog saveDialog;
+		private OpenFileDialog openDialog;
 
 		public MainForm()
 		{
 			InitializeComponent();
 			picViewer.CurrentScaleChanged += PicViewer_CurrentScaleChanged;
             colorOptions.SelectedIndex = 0;
+
 			saveDialog = new SaveFileDialog();
-        }
+			saveDialog.Filter = "PNG Files|*.png|All Files|*.*";
+			saveDialog.DefaultExt = ".png";
+			saveDialog.Title = "Save PNG";
+
+			openDialog = new OpenFileDialog();
+			openDialog.Filter = "Open Files|*.png;*.p8|PNG Files|*.png|Cart Files|*.p8|All Files|*.*";
+			openDialog.Title = "Open Image or Cart";
+		}
 
 		private string P8File
 		{
@@ -256,16 +266,7 @@ namespace PICO8Tool
 
 				// replace with PICO-8 palette
                 applyPicoPalette(img);
-                /*
-				var pal = img.Palette;
-				for (int i = 0; i < 256; i++)
-				{
-					pal.Entries[i] = i < 16 ? picoPalette[i] : Color.Black;
-                }
-
-				img.Palette = pal;
-                */
-
+            
 				// copy bits
 				var ary = pixels.ToArray();
 				var bmp = img.LockBits(new Rectangle(0, 0, img.Width, img.Height), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
@@ -421,9 +422,6 @@ namespace PICO8Tool
 		{
 			if (picViewer.Image != null)
 			{
-				saveDialog.Filter = "PNG Files|*.png|All Files|*.*";
-				saveDialog.DefaultExt = ".png";
-				saveDialog.Title = "Save PNG";
 				saveDialog.InitialDirectory = String.IsNullOrWhiteSpace(imgFile) ? "" : Path.GetDirectoryName(imgFile);
 				saveDialog.FileName = Path.GetFileName(imgFile);
 
@@ -494,6 +492,20 @@ namespace PICO8Tool
 		private void btnAbout_Click(object sender, EventArgs e)
 		{
 			MessageBox.Show(this, "PICO8Tool v" + Application.ProductVersion + "\nby Scott Ramsay\nhttps://github.com/foobit/PICO8Tool", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+		}
+
+		private void btnOpen_Click(object sender, EventArgs e)
+		{
+			openDialog.InitialDirectory = String.IsNullOrWhiteSpace(lastOpenFile) ? "" : Path.GetDirectoryName(lastOpenFile);
+			openDialog.FileName = Path.GetFileName(lastOpenFile);
+
+			if (openDialog.ShowDialog(this) == DialogResult.Cancel)
+			{
+				return;
+			}
+
+			lastOpenFile = openDialog.FileName;
+			LoadFile(lastOpenFile);
 		}
 	}
 }
